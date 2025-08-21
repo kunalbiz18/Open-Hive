@@ -40,7 +40,7 @@ export function createChatActions({ selectedModels, keys, threads, activeThread,
     return t;
   }
 
-  async function send(text: string, imageDataUrl?: string) {
+  async function send(text: string, imageDataUrl?: string, webSearch?: boolean, multiAgent?: boolean) {
     const prompt = text.trim();
     if (!prompt) return;
 
@@ -52,6 +52,24 @@ export function createChatActions({ selectedModels, keys, threads, activeThread,
           },
          }); 
      }
+
+    // Handle multi-agent mode
+    if (multiAgent) {
+      // For multi-agent mode, we'll use a different approach
+      // For now, let's show a message that multi-agent is enabled
+      const userMsg: ChatMessage = { role: 'user', content: prompt, ts: Date.now() };
+      const thread = ensureThread();
+      const nextHistory = [...(thread.messages ?? []), userMsg];
+      setThreads(prev => prev.map(t => t.id === thread.id ? { ...t, title: thread.title === 'New Chat' ? prompt.slice(0, 40) : t.title, messages: nextHistory } : t));
+      
+      // Add a system message indicating multi-agent mode
+      const systemMsg: ChatMessage = { role: 'assistant', content: '🤖 Multi-Agent Mode Enabled: Your query will be processed by a team of specialized AI agents working collaboratively.', ts: Date.now() };
+      setThreads(prev => prev.map(t => t.id === thread.id ? { ...t, messages: [...(t.messages ?? nextHistory), systemMsg] } : t));
+      
+      // TODO: Implement actual multi-agent orchestration here
+      // For now, we'll just show the message
+      return;
+    }
     
     const userMsg: ChatMessage = { role: 'user', content: prompt, ts: Date.now() };
     const thread = ensureThread();

@@ -631,6 +631,27 @@ body.light * {
 .search-toggle:hover { border-color: rgba(255,255,255,0.28); }
 .search-toggle:focus-visible { box-shadow: 0 0 0 3px var(--accent-interactive-focus); }
 
+/* Multi-Agent Toggle */
+.multi-agent-toggle {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6);
+  transition: all 0.2s ease;
+}
+.multi-agent-toggle:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8);
+}
+.multi-agent-toggle[data-active="true"] {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  border-color: #10b981;
+  box-shadow: 0 0 0 1px #10b981, 0 0 12px -2px rgba(16, 185, 129, 0.3);
+}
+.multi-agent-toggle[data-active="true"] .multi-agent-toggle-label { color: #fff; }
+.multi-agent-toggle:focus-visible { box-shadow: 0 0 0 3px #10b981; }
+
 @media (prefers-reduced-motion: reduce) {
   .accent-dot-pulse::after { animation: none; opacity: .35; }
 }

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
-import { Globe, Paperclip, Send, Loader2, X, FileText } from "lucide-react"
+import { Globe, Paperclip, Send, Loader2, X, FileText, Users } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Textarea } from "@/components/ui/textarea"
@@ -78,7 +78,7 @@ export function AiInput({
   onSubmit,
   loading = false,
 }: {
-  onSubmit: (text: string, imageDataUrl?: string, webSearch?: boolean) => void;
+  onSubmit: (text: string, imageDataUrl?: string, webSearch?: boolean, multiAgent?: boolean) => void;
   loading?: boolean;
 }) {
   const [value, setValue] = useState("");
@@ -87,6 +87,7 @@ export function AiInput({
     maxHeight: MAX_HEIGHT,
   });
   const [showSearch, setShowSearch] = useState(true);
+  const [showMultiAgent, setShowMultiAgent] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -141,7 +142,7 @@ export function AiInput({
         fr.readAsDataURL(attachedFile);
       });
     }
-    onSubmit(value.trim(), dataUrl, showSearch);
+    onSubmit(value.trim(), dataUrl, showSearch, showMultiAgent);
     setValue("");
     setAttachedFile(null);
     setImagePreview(null);
@@ -379,6 +380,65 @@ export function AiInput({
                       className="text-xs overflow-hidden whitespace-nowrap search-toggle-label flex-shrink-0"
                     >
                       Search
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </button>
+              
+              {/* Multi-Agent Button */}
+              <button
+                type="button"
+                onClick={() => setShowMultiAgent(!showMultiAgent)}
+                className={cn(
+                  "rounded-full transition-all flex items-center gap-1.5 px-1.5 py-1 h-7 multi-agent-toggle"
+                )}
+                data-active={showMultiAgent}
+                aria-pressed={showMultiAgent ? "true" : "false"}
+                aria-label="Toggle multi-agent mode"
+                title="Toggle multi-agent collaboration mode"
+              >
+                <div className="w-3.5 h-3.5 flex items-center justify-center flex-shrink-0">
+                  <motion.div
+                    animate={{
+                      scale: showMultiAgent ? 1.1 : 1,
+                    }}
+                    whileHover={{
+                      scale: 1.1,
+                      transition: {
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 10,
+                      },
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 25,
+                    }}
+                  >
+                    <Users
+                      className={cn(
+                        "w-3.5 h-3.5",
+                        showMultiAgent
+                          ? "text-white"
+                          : "text-black/60 dark:text-white/50"
+                      )}
+                    />
+                  </motion.div>
+                </div>
+                <AnimatePresence>
+                  {showMultiAgent && (
+                    <motion.span
+                      initial={{ width: 0, opacity: 0 }}
+                      animate={{
+                        width: "auto",
+                        opacity: 1,
+                      }}
+                      exit={{ width: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-xs overflow-hidden whitespace-nowrap multi-agent-toggle-label flex-shrink-0"
+                    >
+                      Team
                     </motion.span>
                   )}
                 </AnimatePresence>
