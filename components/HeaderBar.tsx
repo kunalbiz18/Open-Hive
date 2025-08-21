@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import GithubStar from "@/components/GithubStar";
 import ThemeToggle from "@/components/ThemeToggle";
 import CustomModels from "@/components/CustomModels";
@@ -72,6 +73,20 @@ export default function HeaderBar({
         <h1 className="text-xl md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent drop-shadow-[0_1px_0_rgba(255,255,255,0.12)] select-none pointer-events-none">
           {title}
         </h1>
+        <div className="flex justify-center mt-2 space-x-4">
+          <Link
+            href="/"
+            className="text-sm text-white/80 hover:text-white transition-colors"
+          >
+            Chat
+          </Link>
+          <Link
+            href="/multi-agent"
+            className="text-sm text-white/80 hover:text-white transition-colors"
+          >
+            Multi-Agent
+          </Link>
+        </div>
       </div>
 
       {/* Right cluster order (left→right visual): Change models, Custom models (icon), Theme (icon), Settings (icon), GitHub */}
